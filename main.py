@@ -35,4 +35,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    record()
+    price_trigger()
