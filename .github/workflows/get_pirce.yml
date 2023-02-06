@@ -19,6 +19,7 @@ jobs:
       
     steps:
       - uses: actions/checkout@v2
+      - uses: ankane/setup-mysql@v1
 #       - name: Set timezone
 #         run: sudo timedatectl set-timezone 'Asia/Shanghai'
 #       - name: Echo current time
