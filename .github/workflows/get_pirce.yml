@@ -1,4 +1,4 @@
-name: Daily Bonus
+name: Price Record
 
 on:
   push:
@@ -16,19 +16,17 @@ jobs:
       USERNAME : ${{ secrets.USERNAME }}
       PASSWORD : ${{ secrets.PASSWORD }}
       DATABASE : ${{ secrets.DATABASE }}
-      TOKEN: ${{ secrets.TOKEN }}
-      USER_ID: ${{ secrets.USER_ID }}
-
+      
     steps:
-      - uses: actions/checkout@v2
+#       - uses: actions/checkout@v2
       - name: Set timezone
         run: sudo timedatectl set-timezone 'Asia/Shanghai'
       - name: Echo current time
         run: timedatectl
-      - name: Set up Python 3.8
+      - name: Set up Python 3.10
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Install dependencies
         run: |
