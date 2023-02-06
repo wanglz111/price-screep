@@ -1,0 +1,39 @@
+name: Daily Bonus
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '* * * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      HOST : ${{ secrets.HOST }}
+      USERNAME : ${{ secrets.USERNAME }}
+      PASSWORD : ${{ secrets.PASSWORD }}
+      DATABASE : ${{ secrets.DATABASE }}
+      TOKEN: ${{ secrets.TOKEN }}
+      USER_ID: ${{ secrets.USER_ID }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set timezone
+        run: sudo timedatectl set-timezone 'Asia/Shanghai'
+      - name: Echo current time
+        run: timedatectl
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+          architecture: 'x64'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: get price
+        run: python ./main.py
+        if: always()
