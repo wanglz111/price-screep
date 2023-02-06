@@ -1,5 +1,5 @@
 from raw_data_requests import get_data
-from sql_control import get_all_analysis_items, add_item_to_analysis_items, add_price_point
+from sql_control import get_all_analysis_items, add_item_to_analysis_items, add_price_point, get_all_monitor_items
 import time
 from handle_data import price_data, lower_price_trigger
 
@@ -12,8 +12,8 @@ def record():
         price_record = str(price_record)
         add_price_point(item[0], timestamp=int(time.time()), lowest_price=lowest_price, mean_price=mean_price, weighted_price=weighted_price, price_record=price_record)
 
-def lower_price_trigger():
-    items = get_all_analysis_items()
+def price_trigger():
+    items = get_all_monitor_items()
     for item in items:
         time.sleep(2)
         data = get_data(keyword=item[1])
@@ -25,15 +25,14 @@ def lower_price_trigger():
 def main():
     # record() 3600s一次, lower_price_trigger() 600s一次
     while True:
-        if int(time.time()) % 3600 == 0:
+        now = int(time.time())
+        if now % 3600 == 0 :
             record()
-        if int(time.time()) % 600 == 0:
-            lower_price_trigger()
+        if now % 600 == 0:
+            price_trigger()
 
 
 
 
 if __name__ == '__main__':
-    while True:
-        record()
-        time.sleep(600)
+    main()

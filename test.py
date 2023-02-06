@@ -4,7 +4,7 @@ from raw_data_requests import get_data
 from sql_control import *
 from handle_data import price_data, lower_price_trigger
 
-def test_sql():
+def test_add_item_to_analysis_items():
     raw_data = get_all_analysis_items()
     for item in raw_data:
         print(item[0])
@@ -64,6 +64,7 @@ if __name__ == '__main__':
     # test_uuid()
     # test_get_data()
     # test_add_price_point()
-    # test_price_data()
-    test_lower_price_trigger()
+    test_price_data()
+    # test_lower_price_trigger()
     # test_add_trigger_item()
+    pass
