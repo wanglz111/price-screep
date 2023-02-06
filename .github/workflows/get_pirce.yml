@@ -18,7 +18,7 @@ jobs:
       DATABASE : ${{ secrets.DATABASE }}
       
     steps:
-#       - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Set timezone
         run: sudo timedatectl set-timezone 'Asia/Shanghai'
       - name: Echo current time
