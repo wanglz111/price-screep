@@ -49,6 +49,8 @@ def get_data(keyword='野兽之灵', region='群雄', attr='', excludeAttr='', s
 
     response = requests.post('https://qqsg.pc9527.vip:3001/qqsg/allList', headers=headers, json=json_data)
 
+    if response.json()['code'] != "200":
+        raise Exception('Error: ' + response.json()['msg'])
     # parse response
     code = response.json()['code']
     data = response.json()['data']

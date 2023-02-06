@@ -1,5 +1,39 @@
 from raw_data_requests import get_data
-from sql_control import get_all_items, add_item
+from sql_control import get_all_analysis_items, add_item_to_analysis_items, add_price_point
+import time
+from handle_data import price_data, lower_price_trigger
 
-raw_data = get_all_items()
-print(raw_data)
+def record():
+    items = get_all_analysis_items()
+    for item in items:
+        time.sleep(2)
+        data = get_data(keyword=item[1])
+        (lowest_price, mean_price, weighted_price, price_record) = price_data(data)
+        price_record = str(price_record)
+        add_price_point(item[0], timestamp=int(time.time()), lowest_price=lowest_price, mean_price=mean_price, weighted_price=weighted_price, price_record=price_record)
+
+def lower_price_trigger():
+    items = get_all_analysis_items()
+    for item in items:
+        time.sleep(2)
+        data = get_data(keyword=item[1])
+        lowest_price = lower_price_trigger(data)
+        if lowest_price < item[6]:
+            print("trigger!")
+            # send message
+
+def main():
+    # record() 3600s一次, lower_price_trigger() 600s一次
+    while True:
+        if int(time.time()) % 3600 == 0:
+            record()
+        if int(time.time()) % 600 == 0:
+            lower_price_trigger()
+
+
+
+
+if __name__ == '__main__':
+    while True:
+        record()
+        time.sleep(600)

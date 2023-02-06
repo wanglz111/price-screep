@@ -21,25 +21,58 @@ cursor = connection.cursor()
 # cursor.execute("CREATE TABLE IF NOT EXISTS items (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), typeId INT, attr VARCHAR(255), description VARCHAR(255))")
 # 增加战天使之翼(男)的数据
 
-def get_all_items():
+def get_all_analysis_items():
     # 从数据库中获取所有待监控数据
     # 返回list
-    cursor.execute("SELECT * FROM items")
+    cursor.execute("SELECT * FROM analysis_items")
     result = cursor.fetchall()
     return result
 
-def add_item(name, typeId, attr, description, search_type=0, low_price=9999999999):
-    # 向数据库中添加数据
-    # search_type: 0: 数据分析打点, 1: 低价监控
-    cursor.execute("INSERT INTO items (name, typeId, attr, description, search_type, low_price, deleted) VALUES (%s, %s, %s, %s, %s, 0)", (
+def add_item_to_analysis_items(name, typeId, attr, excludeAttr, description):
+    # 向数据库中添加一条待监控数据
+    cursor.execute("INSERT INTO analysis_items (name, typeId, attr, excludeAttr, description) VALUES (%s, %s, %s, %s, %s)", (
         name,
         typeId,
         attr,
-        description,
-        search_type,
-        low_price
+        excludeAttr,
+        description
     ))
 
-def delete_item(id):
-    # 从数据库中删除数据, 逻辑删除
-    cursor.execute("UPDATE items SET deleted = 1 WHERE id = %s", (id))
+def add_price_point(items_id, timestamp, lowest_price, mean_price, weighted_price, price_record):
+    # 向数据库中添加一条价格点
+    #     create table qqsg.price_points
+    # (
+    #     id           int auto_increment
+    #         primary key,
+    #     items_id     int       null,
+    #     timestamp    timestamp null,
+    #     lowest_price int       null,
+    #     mean_price   int       null
+    # );
+
+    cursor.execute("INSERT INTO price_points (items_id, timestamp, lowest_price, mean_price, weighted_price, records) VALUES (%s, %s, %s, %s, %s, %s)", (
+        items_id,
+        timestamp,
+        lowest_price,
+        mean_price,
+        weighted_price,
+        price_record
+    ))
+
+def get_all_monitor_items():
+    # 从数据库中获取所有待监控数据
+    # 返回list
+    cursor.execute("SELECT * FROM monitor_items")
+    result = cursor.fetchall()
+    return result
+
+def add_item_to_monitor_items(name, typeId, attr, excludeAttr, description, trigger_price):
+    # 向数据库中添加一条待监控数据
+    cursor.execute("INSERT INTO monitor_items (name, typeId, attr, excludeAttr, description, trigger_price) VALUES (%s, %s, %s, %s, %s, %s)", (
+        name,
+        typeId,
+        attr,
+        excludeAttr,
+        description,
+        trigger_price
+    ))
